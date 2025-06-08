@@ -1,9 +1,12 @@
 import { DefaultCatchBoundary } from "@/components/DefaultCatchBoundary"
+import { Header } from "@/components/Header"
 import { NotFound } from "@/components/NotFound"
 import { seo } from "@/utils/seo"
 import type { QueryClient } from "@tanstack/react-query"
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import type * as React from "react"
+import { useState } from "react"
+import { toast } from "sonner"
 import { Providers } from "../providers"
 import customCss from "../styles/custom.css?url"
 import appCss from "../styles/index.css?url"
@@ -21,8 +24,9 @@ export const Route = createRootRouteWithContext<{
                 content: "width=device-width, initial-scale=1"
             },
             ...seo({
-                title: "Instructa Start",
-                description: "Instructa App Starter"
+                title: "CineVision - Movie Ranking & Recommendations",
+                description:
+                    "Rank your favorite movies and get personalized recommendations powered by AI"
             })
         ],
         links: [
@@ -67,8 +71,29 @@ export const Route = createRootRouteWithContext<{
 })
 
 function RootComponent() {
+    const [user, setUser] = useState<{ name?: string; email?: string; picture?: string } | null>(
+        null
+    )
+
+    const handleLogin = () => {
+        // Placeholder for Google OAuth login
+        toast.info("Google login integration coming soon!")
+        // For demo purposes, set a mock user
+        setUser({
+            name: "Demo User",
+            email: "demo@example.com",
+            picture: undefined
+        })
+    }
+
+    const handleLogout = () => {
+        setUser(null)
+        toast.success("Logged out successfully")
+    }
+
     return (
         <RootDocument>
+            <Header user={user || undefined} onLogin={handleLogin} onLogout={handleLogout} />
             <Outlet />
         </RootDocument>
     )
